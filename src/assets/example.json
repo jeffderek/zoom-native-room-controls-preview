@@ -1,0 +1,69 @@
+{
+    "adapters": [
+        {
+            "model": "GenericNetworkAdapter",
+            "ip": "tcp://[USER_IP_ADDRESS]:2202",
+            "ports": [
+                {
+                    "id": "mic1",
+                    "name": "Ceiling Mic",
+                    "methods": [
+                        {
+                            "id": "mute",
+                            "name": "Mute Status",
+                            "command": "< SET DEVICE_AUDIO_MUTE % >\\x0D",
+                            "params": [
+                                {
+                                    "id": "mute",
+                                    "name": "Mute On",
+                                    "value": "ON"
+                                },
+                                {
+                                    "id": "unmute",
+                                    "name": "Mute Off",
+                                    "value": "OFF"
+                                }
+                            ],
+                            "type": "actions"
+                        },
+                        {
+                            "id": "color",
+                            "name": "Mute Status",
+                            "command": "< SET LED_COLOR_UNMUTED % >\\x0D",
+                            "params": [
+                                {
+                                    "id": "mute",
+                                    "name": "Mute On",
+                                    "value": "RED"
+                                },
+                                {
+                                    "id": "unmute",
+                                    "name": "Mute Off",
+                                    "value": "GREEN"
+                                }
+                            ],
+                            "type": "actions"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "styles": [
+        "mic1.icon=icon_ceiling_mic"
+    ],
+    "rules": {
+        "meeting_started": [],
+        "meeting_ended": [],
+        "microphone_muted": [
+            "mic1.mute.mute",
+            "mic1.color.mute"
+        ],
+        "microphone_unmuted": [
+            "mic1.mute.unmute",
+            "mic1.color.unmute"
+        ],
+        "video_started": [],
+        "video_stopped": []
+    }
+}
