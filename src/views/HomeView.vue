@@ -9,14 +9,31 @@
                 <div v-for="adapter in calculatedJson.adapters">
                     {{ adapter.model }}
                     <div v-for="port in adapter.ports" class="port">
-                        <div class="header">{{ port.name }}</div>
-                        <div v-for="method in port.methods" class="method">
-                            <p>{{ method.name }}</p>
-                            <div v-for="param in method.params">
+                        <div class="header two-columns-flex">
+                            <p>{{ port.name }}</p>
+                            <div v-if="getMainMethod(adapter.model, port.id)">
                                 <button class="btn-default">
-                                    {{ param.name }}
+                                    {{
+                                        getMainMethod(adapter.model, port.id)
+                                            .name
+                                    }}
                                 </button>
                             </div>
+                        </div>
+                        <div
+                            v-for="method in port.methods"
+                            class="method two-columns-flex"
+                        >
+                            <template v-if="method.type == 'actions'">
+                                <p>{{ method.name }}</p>
+                                <div class="param">
+                                    <div v-for="param in method.params">
+                                        <button class="btn-default">
+                                            {{ param.name }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -46,6 +63,27 @@ export default {
                 console.log('not valid json');
             }
         },
+        getMainMethod(model, portId) {
+            let search = portId + '.main_method=';
+            let style = this.calculatedJson.styles.find((style) =>
+                style.startsWith(search)
+            );
+            if (style) {
+                let methodId = style.substr(search.length);
+                let adapter = this.calculatedJson.adapters.find(
+                    (adapter) => adapter.model == model
+                );
+                if (adapter) {
+                    let port = adapter.ports.find((port) => port.id == portId);
+                    if (port) {
+                        let method = port.methods.find(
+                            (method) => method.id == methodId
+                        );
+                        return method;
+                    } else return null;
+                } else return null;
+            } else return null;
+        },
     },
     computed: {
         exampleJson() {
@@ -54,12 +92,28 @@ export default {
         calculatedJson() {
             try {
                 let json = JSON.parse(this.json);
+
+                // Zoom automatically adds On/Off methods for the iTachIP2CC
+                json.adapters
+                    .filter((adapter) => adapter.model == 'iTachIP2CC')
+                    .forEach((adapter) => {
+                        adapter.ports.forEach((port) => {
+                            // TODO Add Params to the default power method so you get On/Off
+                            let defaultPowerMethods = [
+                                { name: 'Power', id: 'power' },
+                            ];
+                            port.methods = defaultPowerMethods;
+                            json.styles.push(port.id + '.main_method=power');
+                        });
+                    });
+
                 return json;
             } catch {
                 return null;
             }
         },
     },
+    mounted() {},
 };
 </script>
 
@@ -101,7 +155,23 @@ export default {
             border: solid 1px $color-border;
             border-radius: 5px;
 
+            .two-columns-flex {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
             .header {
+            }
+
+            .method {
+                .param {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                }
             }
         }
     }

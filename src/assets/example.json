@@ -1,45 +1,140 @@
 {
     "adapters": [
         {
-            "model": "GenericNetworkAdapter",
-            "ip": "tcp://[USER_IP_ADDRESS]:2202",
+            "model": "iTachIP2SL",
+            "ip": "10.100.87.43",
+            "uuid": "GlobalCache_000C1E051AEE",
             "ports": [
                 {
-                    "id": "mic1",
-                    "name": "Ceiling Mic",
+                    "id": "sl_dten_tv",
+                    "name": "DTEN TV",
+                    "settings": {
+                        "baud_rate": "115200",
+                        "flow_control": "FLOW_NONE",
+                        "parity": "PARITY_NO"
+                    },
                     "methods": [
                         {
-                            "id": "mute",
-                            "name": "Mute Status",
-                            "command": "< SET DEVICE_AUDIO_MUTE % >\\x0D",
+                            "id": "power",
+                            "name": "Power",
+                            "command": "\\x99\\xA2\\x01\\x01\\x27\\xAA\\xAA\\xAA",
+                            "type": "action"
+                        },
+                        {
+                            "id": "sleep",
+                            "name": "Sleep",
+                            "command": "\\x99\\x01%\\xAA",
                             "params": [
                                 {
-                                    "id": "mute",
-                                    "name": "Mute On",
-                                    "value": "ON"
+                                    "id": "confirm",
+                                    "name": "Confirm",
+                                    "value": "\\x26\\x01\\xD9"
                                 },
                                 {
-                                    "id": "unmute",
-                                    "name": "Mute Off",
-                                    "value": "OFF"
+                                    "id": "exit",
+                                    "name": "Exit",
+                                    "value": "\\x14\\x01\\xEB"
                                 }
                             ],
                             "type": "actions"
                         },
                         {
-                            "id": "color",
-                            "name": "Mute Status",
-                            "command": "< SET LED_COLOR_UNMUTED % >\\x0D",
+                            "id": "mute",
+                            "name": "Mute",
+                            "command": "\\x99\\x01%\\xAA",
                             "params": [
                                 {
                                     "id": "mute",
-                                    "name": "Mute On",
-                                    "value": "RED"
+                                    "name": "Mute",
+                                    "value": "\\x02\\x01\\xFD"
                                 },
                                 {
                                     "id": "unmute",
-                                    "name": "Mute Off",
-                                    "value": "GREEN"
+                                    "name": "Unmute",
+                                    "value": "\\x02\\x01\\xFD"
+                                }
+                            ],
+                            "type": "actions"
+                        },
+                        {
+                            "id": "volume",
+                            "name": "Volume",
+                            "command": "\\x99\\x01%\\xAA",
+                            "params": [
+                                {
+                                    "id": "up",
+                                    "name": "Up",
+                                    "value": "\\x17\\x01\\xE8"
+                                },
+                                {
+                                    "id": "down",
+                                    "name": "Down",
+                                    "value": "\\x18\\x01\\xE7"
+                                }
+                            ],
+                            "type": "actions"
+                        },
+                        {
+                            "id": "source",
+                            "name": "Source",
+                            "command": "\\x99\\x01%\\xAA",
+                            "params": [
+                                {
+                                    "id": "show",
+                                    "name": "Show",
+                                    "value": "\\x20\\x01\\xDF"
+                                },
+                                {
+                                    "id": "hide",
+                                    "name": "Hide",
+                                    "value": "\\x14\\x01\\xEB"
+                                }
+                            ],
+                            "type": "actions"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "model": "iTachIP2CC",
+            "ip": "10.100.87.99",
+            "uuid": "GlobalCache_000C1E051AEE",
+            "ports": [
+                {
+                    "id": "cc_light",
+                    "name": "Light",
+                    "position": 1
+                },
+                {
+                    "id": "cc_projector",
+                    "name": "Projector",
+                    "position": 2
+                }
+            ]
+        },
+        {
+            "model": "GenericNetworkAdapter",
+            "ip": "tcp://10.100.87.99:4998",
+            "ports": [
+                {
+                    "id": "generic_curtain",
+                    "name": "Curtain",
+                    "methods": [
+                        {
+                            "id": "power",
+                            "name": "Power",
+                            "command": "setstate,1:3,%\r",
+                            "params": [
+                                {
+                                    "id": "on",
+                                    "name": "Open",
+                                    "value": "1"
+                                },
+                                {
+                                    "id": "off",
+                                    "name": "Close",
+                                    "value": "0"
                                 }
                             ],
                             "type": "actions"
@@ -50,20 +145,38 @@
         }
     ],
     "styles": [
-        "mic1.icon=icon_ceiling_mic"
+        "sl_dten_tv.main_method=power",
+        "sl_dten_tv.icon=icon_air_conditioner",
+        "sl_dten_tv.power.icon=icon_power",
+        "sl_dten_tv.volume.up.icon=icon_up",
+        "sl_dten_tv.volume.down.icon=icon_down",
+        "cc_light.icon=icon_light",
+        "cc_projector.icon=icon_projector",
+        "generic_curtain.main_method=power",
+        "generic_curtain.icon=icon_curtain"
     ],
     "rules": {
-        "meeting_started": [],
-        "meeting_ended": [],
+        "meeting_started": [
+            "cc_light.power.on",
+            "cc_projector.power.on",
+            "generic_curtain.power.on"
+        ],
+        "meeting_ended": [
+            "cc_light.power.off",
+            "cc_projector.power.off",
+            "generic_curtain.power.off"
+        ],
         "microphone_muted": [
-            "mic1.mute.mute",
-            "mic1.color.mute"
+            "sl_dten_tv.mute.mute"
         ],
         "microphone_unmuted": [
-            "mic1.mute.unmute",
-            "mic1.color.unmute"
+            "sl_dten_tv.mute.unmute"
         ],
-        "video_started": [],
-        "video_stopped": []
+        "video_started": [
+            "generic_curtain.power.on"
+        ],
+        "video_stopped": [
+            "generic_curtain.power.off"
+        ]
     }
 }
