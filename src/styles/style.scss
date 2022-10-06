@@ -10,8 +10,8 @@
 }
 
 body {
-    font-family: sans-serif;
-    background-color: #fff;
+    font-family: 'Lato', sans-serif;
+    background-color: $color-background;
     font-size: 1rem;
     line-height: 1.6;
     color: #000;
@@ -50,18 +50,8 @@ a {
     outline: none;
 
     // Colors
-    background-color: transparent;
-    color: $color-black;
-
-    // Size
-    padding: 0 16px;
-    margin: 6px 8px;
-    min-width: 124px;
-    height: 60px;
-
-    // Border
-    border: solid 1px $color-border;
-    border-radius: 4px;
+    background-color: $color-zoom-button;
+    color: $color-text-dark;
 
     &.primary {
         background-color: $color-primary;
@@ -85,4 +75,34 @@ a {
         background: lighten($color-primary, 10);
         border-color: lighten($color-primary, 10);
     }
+}
+
+.btn-circle {
+    // Border
+    //border: solid 1px $color-border;
+    border: none;
+    border-radius: 50%;
+
+    // Size
+    padding: 0px;
+    // margin: 6px 8px;
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-rectangle {
+    // Border
+    //border: solid 1px $color-border;
+    border: none;
+    border-radius: 12px;
+
+    // Size
+    padding: 0 22px;
+    // margin: 6px 8px;
+    min-width: 93px;
+    height: 58px;
 }

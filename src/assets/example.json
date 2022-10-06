@@ -1,8 +1,8 @@
 {
     "adapters": [
         {
-            "model": "iTachIP2SL",
-            "ip": "10.100.87.43",
+            "model": "GenericNetworkAdapter",
+            "ip": "tcp://test-mc4-zoom:5000",
             "uuid": "GlobalCache_000C1E051AEE",
             "ports": [
                 {
@@ -91,6 +91,24 @@
                                 }
                             ],
                             "type": "actions"
+                        },
+                        {
+                            "id": "warp",
+                            "name": "Warp Drive",
+                            "command": "\\x99\\x01%\\xAA",
+                            "params": [
+                                {
+                                    "id": "ultra",
+                                    "name": "Ultra",
+                                    "value": "\\x20\\x01\\xDF"
+                                },
+                                {
+                                    "id": "hyper",
+                                    "name": "Hyper",
+                                    "value": "\\x14\\x01\\xEB"
+                                }
+                            ],
+                            "type": "actions"
                         }
                     ]
                 }
@@ -115,7 +133,7 @@
         },
         {
             "model": "GenericNetworkAdapter",
-            "ip": "tcp://10.100.87.99:4998",
+            "ip": "tcp://test-mc4-zoom:5001",
             "ports": [
                 {
                     "id": "generic_curtain",
@@ -150,6 +168,7 @@
         "sl_dten_tv.power.icon=icon_power",
         "sl_dten_tv.volume.up.icon=icon_up",
         "sl_dten_tv.volume.down.icon=icon_down",
+        "sl_dten_tv.warp.invisible=true",
         "cc_light.icon=icon_light",
         "cc_projector.icon=icon_projector",
         "generic_curtain.main_method=power",
