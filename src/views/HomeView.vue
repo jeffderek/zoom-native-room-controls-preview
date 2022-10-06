@@ -7,8 +7,8 @@
             <div id="zoom-controls" v-if="calculatedJson != null">
                 <template v-for="adapter in calculatedJson.adapters">
                     <div v-for="port in adapter.ports" class="port">
-                        <div class="header button-group">
-                            <div class="button-group">
+                        <div class="header method">
+                            <div class="method-label">
                                 <img v-if="port.icon" :src="getIconUrl(port.icon)" />
                                 <p>{{ port.name }}</p>
                             </div>
@@ -17,7 +17,7 @@
                                     <div class="button-group">
                                         <div v-for="param in port.main_method.params">
                                             <button
-                                                class="btn-default"
+                                                class="btn-zoom"
                                                 :class="{
                                                     'btn-rectangle': param.icon == null,
                                                     'btn-circle': param.icon != null,
@@ -33,7 +33,7 @@
                                 </template>
                                 <template v-else>
                                     <button
-                                        class="btn-default"
+                                        class="btn-zoom"
                                         :class="{
                                             'btn-rectangle': port.main_method.icon == null,
                                             'btn-circle': port.main_method.icon != null,
@@ -50,15 +50,15 @@
                         <template v-if="!port.showOnlyMainMethod">
                             <div class="divider"></div>
                             <template v-for="method in port.methods">
-                                <div v-if="method.visible == true" class="method button-group">
-                                    <div class="button-group">
+                                <div v-if="method.visible == true" class="method">
+                                    <div class="method-label">
                                         <img v-if="method.icon" :src="getIconUrl(method.icon)" />
                                         <p>{{ method.name }}</p>
                                     </div>
                                     <div class="button-group" v-if="method.params">
                                         <div v-for="param in method.params">
                                             <button
-                                                class="btn-default"
+                                                class="btn-zoom"
                                                 :class="{
                                                     'btn-rectangle': param.icon == null,
                                                     'btn-circle': param.icon != null,
@@ -73,7 +73,7 @@
                                     </div>
                                     <div v-else>
                                         <button
-                                            class="btn-default"
+                                            class="btn-zoom"
                                             :class="{
                                                 'btn-rectangle': method.icon == null,
                                                 'btn-circle': method.icon != null,
@@ -255,6 +255,9 @@ export default {
 </script>
 
 <style lang="scss">
+$zoom-panel-width: 666px;
+$zoom-button-height: 58px;
+
 #preview-frame {
     display: flex;
     flex-direction: row;
@@ -295,35 +298,17 @@ export default {
             align-items: center;
             justify-content: flex-start;
             gap: 1rem;
-            width: 666px;
+            width: $zoom-panel-width;
 
             .port {
-                //border: solid 1px $color-border;
                 border-radius: 10px;
                 background: $color-white;
-                padding: 0px 18px;
+                padding: 0px 30px;
                 font-size: 19px;
                 width: 100%;
 
-                & > * {
-                    //margin: 22px 0;
-                }
-
-                *:last-child {
-                    //margin-bottom: 0px;
-                }
-
-                .button-group {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: space-between;
-                    gap: 1rem;
-                }
-
                 .header {
                     font-weight: bold;
-                    padding: 22px 0px;
                 }
 
                 .divider {
@@ -333,9 +318,75 @@ export default {
 
                 .method {
                     padding: 22px 0px;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 1rem;
+                }
+
+                .method-label {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 1rem;
+                    white-space: nowrap;
+                    height: $zoom-button-height;
+                }
+
+                .button-group {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 1rem;
+                    flex-wrap: wrap;
                 }
             }
         }
+    }
+}
+
+.btn-zoom {
+    @extend %btn-shared;
+
+    // Border
+    border: none;
+
+    // Text
+    font-size: 20px;
+
+    // Colors
+    background-color: $color-zoom-button;
+    color: $color-text-dark;
+
+    &:active {
+        background: darken($color-zoom-button, 10);
+    }
+
+    &.btn-circle {
+        // Border
+        border-radius: 50%;
+
+        // Size
+        padding: 0px;
+        width: $zoom-button-height;
+        height: $zoom-button-height;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.btn-rectangle {
+        // Border
+        border-radius: 12px;
+
+        // Size
+        padding: 0 22px;
+        min-width: 93px;
+        height: $zoom-button-height;
     }
 }
 </style>

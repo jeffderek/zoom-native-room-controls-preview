@@ -1,0 +1,20 @@
+%btn-shared {
+    // Layout
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    text-align: center;
+
+    // Appearance
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 36px;
+    white-space: nowrap;
+    cursor: pointer;
+    overflow: hidden;
+    text-decoration: none;
+    text-overflow: ellipsis;
+
+    // Functionality
+    outline: none;
+}
