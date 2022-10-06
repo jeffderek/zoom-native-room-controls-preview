@@ -145,7 +145,7 @@ import exampleJson from '@/assets/example.json';
 export default {
     name: 'HomeView',
     data: () => ({
-        json: JSON.stringify(exampleJson),
+        json: JSON.stringify(exampleJson, null, 2),
         jsonObject: null,
     }),
     methods: {
@@ -301,7 +301,6 @@ export default {
             }
         },
     },
-    mounted() {},
 };
 </script>
 
