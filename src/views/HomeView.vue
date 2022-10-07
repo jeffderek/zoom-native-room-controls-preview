@@ -261,6 +261,8 @@ $zoom-button-height: 58px;
 #preview-frame {
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
     height: 100%;
 
     .split {
@@ -273,6 +275,7 @@ $zoom-button-height: 58px;
         display: flex;
         flex-direction: column;
         gap: 1rem;
+
         textarea {
             flex: 1;
         }
@@ -282,6 +285,8 @@ $zoom-button-height: 58px;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
+        overflow: auto;
+        height: 100%;
 
         #json-invalid {
             width: 100%;
@@ -299,6 +304,7 @@ $zoom-button-height: 58px;
             justify-content: flex-start;
             gap: 1rem;
             width: $zoom-panel-width;
+            height: 100%;
 
             .port {
                 border-radius: 10px;
