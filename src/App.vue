@@ -14,22 +14,26 @@
 <style lang="scss">
 @import './styles/style.scss';
 
+$navbar-height: 60px;
+
 #app {
     height: 100%;
     width: 100%;
 
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    overflow: hidden;
-
     nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: $navbar-height;
+        z-index: 1;
+        overflow-y: hidden;
+
         background: $color-primary;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        flex: 0 0 60px;
 
         #logo {
             padding: 8px;
@@ -63,8 +67,9 @@
     }
 
     main {
-        flex: 1 0 auto;
-        height: 10px;
+        height: 100%;
+        padding: 16px;
+        padding-top: ($navbar-height + 16px);
     }
 }
 </style>
