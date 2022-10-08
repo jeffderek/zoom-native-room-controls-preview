@@ -1,12 +1,6 @@
 module.exports = {
-    publicPath: '',
     devServer: {
-        host: 'localhost',
-        open: {
-            app: {
-                name: 'chrome',
-            },
-        },
+        open: 'chrome',
     },
     css: {
         loaderOptions: {
