@@ -40,13 +40,13 @@ $navbar-height: 60px;
         }
 
         #links {
-            height: 100%;
+            height: $navbar-height;
             display: flex;
             flex-direction: row;
             align-items: flex-end;
             justify-content: center;
-            margin-right: 1rem;
-            margin-top: 1rem;
+            padding-right: 1rem;
+            padding-top: 1rem;
             gap: 1rem;
 
             .link {
@@ -60,7 +60,7 @@ $navbar-height: 60px;
 
                 &.router-link-exact-active {
                     color: $color-primary;
-                    background-color: $color-white;
+                    background-color: $color-background;
                 }
             }
         }
