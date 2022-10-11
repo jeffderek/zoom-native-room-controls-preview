@@ -1,11 +1,11 @@
 <template>
     <div id="preview-frame">
         <div id="json-entry" class="split">
-            <textarea name="json" id="json-textarea" v-model="json"></textarea>
+            <textarea id="json-textarea" v-model="json"></textarea>
         </div>
         <div id="preview" class="split">
-            <div id="zoom-controls" v-if="calculatedJson != null">
-                <template v-for="adapter in calculatedJson.adapters">
+            <div id="zoom-controls" v-if="calculatedControls != null">
+                <template v-for="adapter in calculatedControls.adapters">
                     <div v-for="port in adapter.ports" class="port">
                         <div class="header method">
                             <div class="method-label">
@@ -103,17 +103,8 @@ export default {
     name: 'HomeView',
     data: () => ({
         json: JSON.stringify(exampleJson, null, 2),
-        jsonObject: null,
     }),
     methods: {
-        preview() {
-            try {
-                let json = JSON.parse(this.json);
-                this.jsonObject = json;
-            } catch {
-                this.jsonObject = null;
-            }
-        },
         getIconUrl(iconName) {
             var icons = require.context('@/assets/zoom_icons/dark/', true, /\.png$/);
 
@@ -128,7 +119,7 @@ export default {
         exampleJson() {
             return exampleJson;
         },
-        calculatedJson() {
+        calculatedControls() {
             try {
                 let json = JSON.parse(this.json);
 
@@ -158,7 +149,7 @@ export default {
 
                 // Take the information in the styles array and use it to populate the adapters array with
                 // information to better style things inline.  This makes for a clunkier object but does all
-                // of our processing once when handling the change and makes the html rendering above much easier.
+                // of our processing once when handling a change to the json and makes the html rendering above much easier.
                 json.styles.forEach((style) => {
                     // Break up the style into component parts
                     let regex =
@@ -289,8 +280,8 @@ $zoom-button-height: 58px;
 
         #json-invalid {
             width: 100%;
-            background: $color-red;
-            color: $color-white;
+            background: $color-error;
+            color: $color-text-light;
             text-align: center;
             padding: 1rem;
             font-size: 1.3rem;
@@ -306,7 +297,7 @@ $zoom-button-height: 58px;
 
             .port {
                 border-radius: 10px;
-                background: $color-white;
+                background: $color-zoom-port-background;
                 padding: 0px 30px;
                 font-size: 19px;
                 width: 100%;
@@ -347,50 +338,50 @@ $zoom-button-height: 58px;
                     gap: 1rem;
                     flex-wrap: wrap;
                 }
+
+                .btn-zoom {
+                    @extend %btn-shared;
+
+                    // Border
+                    border: none;
+
+                    // Text
+                    font-size: 20px;
+
+                    // Colors
+                    background-color: $color-zoom-button;
+                    color: $color-text-dark;
+
+                    &:active {
+                        background: darken($color-zoom-button, 10);
+                    }
+
+                    &.btn-circle {
+                        // Border
+                        border-radius: 50%;
+
+                        // Size
+                        padding: 0px;
+                        width: $zoom-button-height;
+                        height: $zoom-button-height;
+
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    &.btn-rectangle {
+                        // Border
+                        border-radius: 12px;
+
+                        // Size
+                        padding: 0 22px;
+                        min-width: 93px;
+                        height: $zoom-button-height;
+                    }
+                }
             }
         }
-    }
-}
-
-.btn-zoom {
-    @extend %btn-shared;
-
-    // Border
-    border: none;
-
-    // Text
-    font-size: 20px;
-
-    // Colors
-    background-color: $color-zoom-button;
-    color: $color-text-dark;
-
-    &:active {
-        background: darken($color-zoom-button, 10);
-    }
-
-    &.btn-circle {
-        // Border
-        border-radius: 50%;
-
-        // Size
-        padding: 0px;
-        width: $zoom-button-height;
-        height: $zoom-button-height;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    &.btn-rectangle {
-        // Border
-        border-radius: 12px;
-
-        // Size
-        padding: 0 22px;
-        min-width: 93px;
-        height: $zoom-button-height;
     }
 }
 </style>

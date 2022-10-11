@@ -52,7 +52,7 @@ $navbar-height: 60px;
             .link {
                 font-weight: bold;
                 font-size: 1.3rem;
-                color: $color-white;
+                color: $color-text-light;
                 line-height: 100%;
                 border-radius: 5px 5px 0 0;
                 padding: 8px;

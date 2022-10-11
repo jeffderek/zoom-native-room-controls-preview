@@ -1,12 +1,15 @@
 // Sass variables declared here will be available in all <style>
 // declarations because they are imported as additionalData in vue.config.js
+
+// Theme Colors
 $color-primary: #462444;
 $color-secondary: #b3b8ab;
-$color-border: #b3b3b3;
-$color-red: #c21a1a;
-$color-green: #197353;
-$color-white: #fff;
-$color-black: #000;
+$color-error: #c03221;
+$color-success: #157f1f;
+
+// Functional Colors
 $color-background: #f7f7fc;
+$color-zoom-port-background: #fff;
 $color-zoom-button: #efeff4;
 $color-text-dark: #222230;
+$color-text-light: #fff;
