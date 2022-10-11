@@ -2,6 +2,8 @@
 node_modules
 /dist
 
+# config files for testing
+/configs
 
 # local env files
 .env.local
