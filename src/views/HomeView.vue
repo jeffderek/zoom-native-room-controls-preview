@@ -150,62 +150,69 @@ export default {
                 // Take the information in the styles array and use it to populate the adapters array with
                 // information to better style things inline.  This makes for a clunkier object but does all
                 // of our processing once when handling a change to the json and makes the html rendering above much easier.
-                json.styles.forEach((style) => {
-                    // Break up the style into component parts
-                    let regex =
-                        /^(?<port>[^.=]*)\.?(?<method>[^.=]*)\.?(?<param>[^.=]*)\.(?<style>[^.=]*)=(?<value>.*)$/;
-                    let result = regex.exec(style);
 
-                    // Verify that the port referenced in the style actually exists
-                    let port;
-                    json.adapters.find((adapter) => {
-                        let foundPort = adapter.ports.find((port) => port.id == result.groups.port);
-                        if (foundPort) {
-                            port = foundPort;
-                            return true;
-                        } else {
-                            return false;
+                if (json.styles) {
+                    if (json.styles.length == 0) {
+                        return null;
+                    }
+
+                    json.styles.forEach((style) => {
+                        // Break up the style into component parts
+                        let regex =
+                            /^(?<port>[^.=]*)\.?(?<method>[^.=]*)\.?(?<param>[^.=]*)\.(?<style>[^.=]*)=(?<value>.*)$/;
+                        let result = regex.exec(style);
+
+                        // Verify that the port referenced in the style actually exists
+                        let port;
+                        json.adapters.find((adapter) => {
+                            let foundPort = adapter.ports.find((port) => port.id == result.groups.port);
+                            if (foundPort) {
+                                port = foundPort;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        });
+
+                        if (port) {
+                            // Different styles get handled differently
+                            switch (result.groups.style) {
+                                case 'icon': {
+                                    // Add a new icon param to the json inline where it is necessary.
+                                    let icon = result.groups.value;
+
+                                    if (result.groups.method) {
+                                        let method = port.methods.find((method) => method.id == result.groups.method);
+
+                                        if (result.groups.param) {
+                                            let param = method.params.find((param) => param.id == result.groups.param);
+                                            param.icon = icon;
+                                        } else {
+                                            method.icon = icon;
+                                        }
+                                    } else {
+                                        port.icon = icon;
+                                    }
+                                    break;
+                                }
+                                case 'main_method': {
+                                    // Create a new main_method param to the json inline, which
+                                    // makes it easier to render the main method
+                                    port.main_method = port.methods.find((method) => method.id == result.groups.value);
+                                    break;
+                                }
+                                case 'invisible': {
+                                    // At this point no methods will have a visible param.
+                                    // This creates a new visible param and sets it to false if
+                                    // the style says it should be invisible.
+                                    port.methods.find((method) => method.id == result.groups.method).visible =
+                                        result.groups.value != 'true';
+                                    break;
+                                }
+                            }
                         }
                     });
-
-                    if (port) {
-                        // Different styles get handled differently
-                        switch (result.groups.style) {
-                            case 'icon': {
-                                // Add a new icon param to the json inline where it is necessary.
-                                let icon = result.groups.value;
-
-                                if (result.groups.method) {
-                                    let method = port.methods.find((method) => method.id == result.groups.method);
-
-                                    if (result.groups.param) {
-                                        let param = method.params.find((param) => param.id == result.groups.param);
-                                        param.icon = icon;
-                                    } else {
-                                        method.icon = icon;
-                                    }
-                                } else {
-                                    port.icon = icon;
-                                }
-                                break;
-                            }
-                            case 'main_method': {
-                                // Create a new main_method param to the json inline, which
-                                // makes it easier to render the main method
-                                port.main_method = port.methods.find((method) => method.id == result.groups.value);
-                                break;
-                            }
-                            case 'invisible': {
-                                // At this point no methods will have a visible param.
-                                // This creates a new visible param and sets it to false if
-                                // the style says it should be invisible.
-                                port.methods.find((method) => method.id == result.groups.method).visible =
-                                    result.groups.value != 'true';
-                                break;
-                            }
-                        }
-                    }
-                });
+                }
 
                 // Loop through all adapters for the last few parameters that need to be set.
                 json.adapters.forEach((adapter) => {
