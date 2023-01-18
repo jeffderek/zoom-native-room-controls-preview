@@ -2,6 +2,12 @@
     <div id="preview-frame">
         <div id="json-entry" class="split">
             <textarea id="json-textarea" v-model="json"></textarea>
+            <div id="zoom-output" v-if="target">
+                <p class="zoom-output-label">Target:</p>
+                <p class="zoom-output-content" id="zoom-output-target">{{ target }}</p>
+                <p class="zoom-output-label">Command:</p>
+                <p class="zoom-output-content" id="zoom-output-command">{{ command }}</p>
+            </div>
         </div>
         <div id="preview" class="split">
             <div id="zoom-controls" v-if="calculatedControls != null">
@@ -22,6 +28,7 @@
                                                     'btn-rectangle': param.icon == null,
                                                     'btn-circle': param.icon != null,
                                                 }"
+                                                @click="zoomClick(adapter, port, port.main_method, param)"
                                             >
                                                 <p v-if="!param.icon">
                                                     {{ param.name }}
@@ -38,6 +45,7 @@
                                             'btn-rectangle': port.main_method.icon == null,
                                             'btn-circle': port.main_method.icon != null,
                                         }"
+                                        @click="zoomClick(adapter, port, port.main_method)"
                                     >
                                         <p v-if="!port.main_method.icon">
                                             {{ port.main_method.name }}
@@ -63,6 +71,7 @@
                                                     'btn-rectangle': param.icon == null,
                                                     'btn-circle': param.icon != null,
                                                 }"
+                                                @click="zoomClick(adapter, port, method, param)"
                                             >
                                                 <p v-if="!param.icon">
                                                     {{ param.name }}
@@ -78,6 +87,7 @@
                                                 'btn-rectangle': method.icon == null,
                                                 'btn-circle': method.icon != null,
                                             }"
+                                            @click="zoomClick(adapter, port, method)"
                                         >
                                             <p v-if="!method.icon">
                                                 {{ method.name }}
@@ -103,6 +113,8 @@ export default {
     name: 'HomeView',
     data: () => ({
         json: JSON.stringify(exampleJson, null, 2),
+        target: '',
+        command: '',
     }),
     methods: {
         getIconUrl(iconName) {
@@ -112,6 +124,18 @@ export default {
                 return icons('./' + iconName + '.png');
             } catch {
                 return icons('./icon_alert.png');
+            }
+        },
+        zoomClick(adapter, port, method, param) {
+            this.target = port.id;
+
+            if (adapter.model == 'iTachIP2CC') {
+                this.command = `Relay ${param.position} ${param.name}`;
+            } else {
+                this.command = method.command;
+                if (method.type == 'actions') {
+                    this.command = this.command.replace('%', param.value);
+                }
             }
         },
     },
@@ -134,8 +158,8 @@ export default {
                                     name: 'Power',
                                     id: 'power',
                                     params: [
-                                        { name: 'On', id: 'on' },
-                                        { name: 'Off', id: 'off' },
+                                        { name: 'On', id: 'on', position: port.position },
+                                        { name: 'Off', id: 'off', position: port.position },
                                     ],
                                 },
                             ];
@@ -286,6 +310,25 @@ $zoom-button-height: 58px;
 
         textarea {
             flex: 1;
+            border: 1px solid $color-border;
+        }
+
+        #zoom-output {
+            border: 1px solid $color-border;
+            background: #fff;
+            display: grid;
+            grid-template-columns: min-content auto;
+
+            .zoom-output-label {
+                font-weight: bold;
+                font-size: 1rem;
+            }
+
+            .zoom-output-content {
+                text-align: left;
+                width: 100%;
+                font-size: 1rem;
+            }
         }
     }
     #preview {
