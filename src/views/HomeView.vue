@@ -43,19 +43,21 @@
                             <div v-if="port.main_method">
                                 <template v-if="port.main_method.params">
                                     <div class="button-group">
-                                        <div v-for="param in port.main_method.params">
+                                        <div
+                                            v-for="param in port.main_method.params">
                                             <button
                                                 class="btn-zoom"
                                                 :class="{
                                                     'btn-rectangle': param.icon == null,
                                                     'btn-circle': param.icon != null,
                                                 }"
-                                                @click="zoomClick(adapter, port, port.main_method, param)"
-                                            >
+                                                @click="zoomClick(adapter, port, port.main_method, param)">
                                                 <p v-if="!param.icon">
                                                     {{ param.name }}
                                                 </p>
-                                                <img v-else :src="getIconUrl(param.icon)" />
+                                                <img
+                                                    v-else
+                                                    :src="getIconUrl(param.icon)" />
                                             </button>
                                         </div>
                                     </div>
@@ -67,12 +69,13 @@
                                             'btn-rectangle': port.main_method.icon == null,
                                             'btn-circle': port.main_method.icon != null,
                                         }"
-                                        @click="zoomClick(adapter, port, port.main_method)"
-                                    >
+                                        @click="zoomClick(adapter, port, port.main_method)">
                                         <p v-if="!port.main_method.icon">
                                             {{ port.main_method.name }}
                                         </p>
-                                        <img v-else :src="getIconUrl(port.main_method.icon)" />
+                                        <img
+                                            v-else
+                                            :src="getIconUrl(port.main_method.icon)" />
                                     </button>
                                 </template>
                             </div>
@@ -80,12 +83,18 @@
                         <template v-if="!port.showOnlyMainMethod">
                             <div class="divider"></div>
                             <template v-for="method in port.methods">
-                                <div v-if="method.visible == true" class="method">
+                                <div
+                                    v-if="method.visible == true"
+                                    class="method">
                                     <div class="method-label">
-                                        <img v-if="method.icon" :src="getIconUrl(method.icon)" />
+                                        <img
+                                            v-if="method.icon"
+                                            :src="getIconUrl(method.icon)" />
                                         <p>{{ method.name }}</p>
                                     </div>
-                                    <div class="button-group" v-if="method.params">
+                                    <div
+                                        class="button-group"
+                                        v-if="method.params">
                                         <div v-for="param in method.params">
                                             <button
                                                 class="btn-zoom"
@@ -93,12 +102,13 @@
                                                     'btn-rectangle': param.icon == null,
                                                     'btn-circle': param.icon != null,
                                                 }"
-                                                @click="zoomClick(adapter, port, method, param)"
-                                            >
+                                                @click="zoomClick(adapter, port, method, param)">
                                                 <p v-if="!param.icon">
                                                     {{ param.name }}
                                                 </p>
-                                                <img v-else :src="getIconUrl(param.icon)" />
+                                                <img
+                                                    v-else
+                                                    :src="getIconUrl(param.icon)" />
                                             </button>
                                         </div>
                                     </div>
@@ -109,12 +119,13 @@
                                                 'btn-rectangle': method.icon == null,
                                                 'btn-circle': method.icon != null,
                                             }"
-                                            @click="zoomClick(adapter, port, method)"
-                                        >
+                                            @click="zoomClick(adapter, port, method)">
                                             <p v-if="!method.icon">
                                                 {{ method.name }}
                                             </p>
-                                            <img v-else :src="getIconUrl(method.icon)" />
+                                            <img
+                                                v-else
+                                                :src="getIconUrl(method.icon)" />
                                         </button>
                                     </div>
                                 </div>
@@ -123,7 +134,11 @@
                     </div>
                 </template>
             </div>
-            <div v-else id="json-invalid">JSON Is Not Valid</div>
+            <div
+                v-else
+                id="json-invalid">
+                JSON Is Not Valid
+            </div>
         </div>
     </div>
 </template>
