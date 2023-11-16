@@ -1,21 +1,43 @@
 <template>
     <div id="preview-frame">
-        <div id="json-entry" class="split">
-            <textarea id="json-textarea" v-model="json"></textarea>
-            <div id="zoom-output" v-if="target">
+        <div
+            id="json-entry"
+            class="split">
+            <textarea
+                id="json-textarea"
+                v-model="json"></textarea>
+            <div
+                id="zoom-output"
+                v-if="target">
                 <p class="zoom-output-label">Target:</p>
-                <p class="zoom-output-content" id="zoom-output-target">{{ target }}</p>
+                <p
+                    class="zoom-output-content"
+                    id="zoom-output-target">
+                    {{ target }}
+                </p>
                 <p class="zoom-output-label">Command:</p>
-                <p class="zoom-output-content" id="zoom-output-command">{{ command }}</p>
+                <p
+                    class="zoom-output-content"
+                    id="zoom-output-command">
+                    {{ command }}
+                </p>
             </div>
         </div>
-        <div id="preview" class="split">
-            <div id="zoom-controls" v-if="calculatedControls != null">
+        <div
+            id="preview"
+            class="split">
+            <div
+                id="zoom-controls"
+                v-if="calculatedControls != null">
                 <template v-for="adapter in calculatedControls.adapters">
-                    <div v-for="port in adapter.ports" class="port">
+                    <div
+                        v-for="port in adapter.ports"
+                        class="port">
                         <div class="header method">
                             <div class="method-label">
-                                <img v-if="port.icon" :src="getIconUrl(port.icon)" />
+                                <img
+                                    v-if="port.icon"
+                                    :src="getIconUrl(port.icon)" />
                                 <p>{{ port.name }}</p>
                             </div>
                             <div v-if="port.main_method">
