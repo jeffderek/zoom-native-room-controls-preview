@@ -137,7 +137,8 @@
             <div
                 v-else
                 id="json-invalid">
-                JSON Is Not Valid
+                <h1>Error</h1>
+                <p>{{ errorMessage }}</p>
             </div>
         </div>
     </div>
@@ -150,6 +151,7 @@ export default {
     name: 'HomeView',
     data: () => ({
         json: JSON.stringify(exampleJson, null, 2),
+        errorMessage: '',
         target: '',
         command: '',
     }),
@@ -182,7 +184,13 @@ export default {
         },
         calculatedControls() {
             try {
-                let json = JSON.parse(this.json);
+                let json;
+                try{
+                    json = JSON.parse(this.json);
+                }
+                catch {
+                    throw new Error("JSON Parsing Failed");
+                }
 
                 // Zoom automatically adds On/Off methods for the iTachIP2CC, so we have to add them
                 // as well if we want them to render.
@@ -327,14 +335,16 @@ export default {
                             let result = regex.test(this.json);
                             if (!result)
                             {
-                                throw new Error("Empty rules must be truly empty")
+                                throw new Error("Empty rules must be truly empty (Nothing between square brackets [])")
                             }
                         }
                     })
                 }
 
                 return json;
-            } catch {
+            } catch (e) {
+                console.log(e.message)
+                this.errorMessage = e.message
                 // Returning null here will cause the entire preview to not render
                 return null;
             }
@@ -401,7 +411,10 @@ $zoom-button-height: 58px;
             color: $color-text-light;
             text-align: center;
             padding: 1rem;
-            font-size: 1.3rem;
+
+            h1 {
+                font-size: 1.5rem;
+            }
         }
 
         #zoom-controls {
