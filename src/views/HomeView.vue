@@ -313,6 +313,26 @@ export default {
                     });
                 });
 
+                // Zoom has a bug where an empty rule needs to be fully empty or the json fails to load, even if it is proper json.
+                // "meeting_started": [] works
+                // "meeting_started": [ ] will fail
+                // "meeting_started": [
+                // ] will fail
+                if (json.rules)
+                {
+                    Object.keys(json.rules).forEach((rule) => {
+                        if(json.rules[rule].length == 0)
+                        {
+                            let regex = new RegExp("\"rules\"(.|\n)*\"" + rule + "\": \\[\\]");
+                            let result = regex.test(this.json);
+                            if (!result)
+                            {
+                                throw new Error("Empty rules must be truly empty")
+                            }
+                        }
+                    })
+                }
+
                 return json;
             } catch {
                 // Returning null here will cause the entire preview to not render
