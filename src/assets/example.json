@@ -160,6 +160,36 @@
                     ]
                 }
             ]
+        },
+        {
+            "model": "GenericNetworkAdapter",
+            "ip": "tcp://test-mc4-zoom:5002",
+            "ports": [
+                {
+                    "id": "voice_lift",
+                    "name": "Voice Lift",
+                    "methods": [
+                        {
+                            "id": "voice_lift",
+                            "name": "voice_lift",
+                            "command": "(VL:%)",
+                            "params": [
+                                {
+                                    "id": "on",
+                                    "name": "On",
+                                    "value": "ON"
+                                },
+                                {
+                                    "id": "off",
+                                    "name": "Off",
+                                    "value": "OFF"
+                                }
+                            ],
+                            "type": "actions"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "styles": [
@@ -172,7 +202,9 @@
         "cc_light.icon=icon_light",
         "cc_projector.icon=icon_projector",
         "generic_curtain.main_method=power",
-        "generic_curtain.icon=icon_curtain"
+        "generic_curtain.icon=icon_curtain",
+        "voice_lift.main_method=voice_lift",
+        "voice_lift.icon=mdi:mic"
     ],
     "rules": {
         "meeting_started": [

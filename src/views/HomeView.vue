@@ -35,8 +35,14 @@
                         class="port">
                         <div class="header method">
                             <div class="method-label">
+                                <span
+                                    v-if="port.icon && port.icon.startsWith('mdi:')"
+                                    :class="getMaterialIconClass(port.icon)"
+                                    >{{ getMaterialIconName(port.icon) }}</span
+                                >
+
                                 <img
-                                    v-if="port.icon"
+                                    v-else-if="port.icon"
                                     :src="getIconUrl(port.icon)" />
                                 <p>{{ port.name }}</p>
                             </div>
@@ -55,6 +61,11 @@
                                                 <p v-if="!param.icon">
                                                     {{ param.name }}
                                                 </p>
+                                                <span
+                                                    v-else-if="param.icon && param.icon.startsWith('mdi:')"
+                                                    :class="getMaterialIconClass(param.icon)"
+                                                    >{{ getMaterialIconName(param.icon) }}</span
+                                                >
                                                 <img
                                                     v-else
                                                     :src="getIconUrl(param.icon)" />
@@ -73,6 +84,11 @@
                                         <p v-if="!port.main_method.icon">
                                             {{ port.main_method.name }}
                                         </p>
+                                        <span
+                                            v-if="port.main_method.icon && port.main_method.icon.startsWith('mdi:')"
+                                            :class="getMaterialIconClass(port.main_method.icon)"
+                                            >{{ getMaterialIconName(port.main_method.icon) }}</span
+                                        >
                                         <img
                                             v-else
                                             :src="getIconUrl(port.main_method.icon)" />
@@ -87,8 +103,13 @@
                                     v-if="method.visible == true"
                                     class="method">
                                     <div class="method-label">
+                                        <span
+                                            v-if="method.icon && method.icon.startsWith('mdi:')"
+                                            :class="getMaterialIconClass(method.icon)"
+                                            >{{ getMaterialIconName(method.icon) }}</span
+                                        >
                                         <img
-                                            v-if="method.icon"
+                                            v-else-if="method.icon"
                                             :src="getIconUrl(method.icon)" />
                                         <p>{{ method.name }}</p>
                                     </div>
@@ -106,6 +127,11 @@
                                                 <p v-if="!param.icon">
                                                     {{ param.name }}
                                                 </p>
+                                                <span
+                                                    v-else-if="param.icon && param.icon.startsWith('mdi:')"
+                                                    :class="getMaterialIconClass(param.icon)"
+                                                    >{{ getMaterialIconName(param.icon) }}</span
+                                                >
                                                 <img
                                                     v-else
                                                     :src="getIconUrl(param.icon)" />
@@ -123,6 +149,11 @@
                                             <p v-if="!method.icon">
                                                 {{ method.name }}
                                             </p>
+                                            <span
+                                                v-else-if="method.icon && method.icon.startsWith('mdi:')"
+                                                :class="getMaterialIconClass(method.icon)"
+                                                >{{ getMaterialIconName(method.icon) }}</span
+                                            >
                                             <img
                                                 v-else
                                                 :src="getIconUrl(method.icon)" />
@@ -164,6 +195,41 @@ export default {
             } catch {
                 return icons('./icon_alert.png');
             }
+        },
+        getMaterialIconName(iconName) {
+            if (iconName)
+        {
+            const parts = iconName.split(':');
+            if (parts.length > 1)
+            {
+                return parts[1];
+            }
+            else return "";
+
+        }
+        },
+        getMaterialIconClass(iconName) {
+            if (iconName)
+        {
+            const parts = iconName.split(':');
+            if (parts.length > 2) {
+                switch (parts[2]) {
+                    case 'outlined':
+                        return `material-icons-outlined`;
+                    case 'rounded':
+                        return `material-icons-round`;
+                    case 'sharp':
+                        return `material-icons-sharp`;
+                    case 'two_tone':
+                        return `material-icons-two-tone`;
+                    case 'filled':
+                    default:
+                        return `material-icons`;
+                }
+            } else {
+                return `material-icons`
+            }
+        }
         },
         zoomClick(adapter, port, method, param) {
             this.target = port.id;

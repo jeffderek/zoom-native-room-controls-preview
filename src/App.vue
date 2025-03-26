@@ -1,9 +1,19 @@
 <template>
     <nav>
-        <img id="logo" src="@/assets/logo.png" />
+        <img
+            id="logo"
+            src="@/assets/logo.png" />
         <div id="links">
-            <router-link class="link" to="/">Home</router-link>
-            <router-link class="link" to="/about">About</router-link>
+            <router-link
+                class="link"
+                to="/"
+                >Home</router-link
+            >
+            <router-link
+                class="link"
+                to="/about"
+                >About</router-link
+            >
         </div>
     </nav>
     <main>
